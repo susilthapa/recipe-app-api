@@ -24,7 +24,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'core.apps.CoreConfig'
+    
+    'rest_framework',
+    'rest_framework.authtoken',
+
+    # Local
+    'core.apps.CoreConfig',
+    'users.apps.UsersConfig',
 ]
 
 AUTH_USER_MODEL = 'core.User'
