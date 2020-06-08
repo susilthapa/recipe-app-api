@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     # Local
     'core.apps.CoreConfig',
     'users.apps.UsersConfig',
+    'recipe.apps.RecipeConfig'
 ]
 
 AUTH_USER_MODEL = 'core.User'
