@@ -1,3 +1,5 @@
+from unittest.mock import patch
+
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 
@@ -7,6 +9,7 @@ from rest_framework import status
 from rest_framework.test import APIClient
 
 from core.models import Recipe, Tag, Ingredient
+from core import models
 from recipe import serializers
 
 
@@ -149,3 +152,13 @@ class PrivateRecipeApiTests(TestCase):
     self.assertEqual(ingredients.count(), 2)
     self.assertIn(ingredient1, ingredients)
     self.assertIn(ingredient2, ingredients)
+
+  @patch('uuid.uuid4')
+  def test_recipe_file_name_uuid(self, mock_uuid):
+    """Test that image is saved in correct location"""
+    uuid = 'test-uuid'
+    mock_uuid.return_value = uuid
+    file_path = models.recipe_image_file_path(None, 'myimg.jpg')
+
+    exp_path = f'uploads/recipe/{uuid}.jpg'
+    self.assertEqual(file_path, exp_path)

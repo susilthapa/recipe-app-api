@@ -10,6 +10,7 @@ django = "*"
 psycopg2 = "*"
 python-decouple = "*"
 djangorestframework = "*"
+pillow = "*"
 
 [requires]
 python_version = "3.8"
