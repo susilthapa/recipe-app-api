@@ -17,9 +17,9 @@ class BaseRecipeAttributeViewSet(viewsets.GenericViewSet,
   authentication_classes = (TokenAuthentication,)
   permission_classes = (IsAuthenticated,)
 
-  def get_queryset(self):
-    """Return obj for current authenticated user"""
-    return self.queryset.filter(user=self.request.user).order_by('-name')
+  # def get_queryset(self):
+  #   """Return obj for current authenticated user"""
+  #   return self.queryset.filter(user=self.request.user).order_by('-name')
 
   def perform_create(self, serializer):
     """Create new ingredient"""
@@ -46,9 +46,9 @@ class RecipeViewSet(viewsets.ModelViewSet):
   permission_classes = (IsAuthenticated,)
   queryset = Recipe.objects.all()
 
-  def get_queryset(self):
-    """Retrieve recipies for authenticated user"""
-    return self.queryset.filter(user=self.request.user)
+  # def get_queryset(self):
+  #   """Retrieve recipies for authenticated user"""
+  #   return self.queryset.filter(user=self.request.user)
 
   def get_serializer_class(self):
     """Return appropriate serializer class"""
@@ -63,6 +63,19 @@ class RecipeViewSet(viewsets.ModelViewSet):
     """Create new recipe"""
     serializer.save(user=self.request.user)
 
+  def destroy(self, request, *args, **kwargs):
+    try:
+        instance = self.get_object().filter(user=self.request.user)
+
+        self.perform_destroy(instance)
+    
+    except:
+        print('BAD REQ')
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    return Response(status=status.HTTP_204_NO_CONTENT)
+
+
   @action(methods=['POST'], detail=True, url_path='upload-image')
   def upload_image(self, request, pk=None):
     """Upload image to recipe"""
@@ -74,12 +87,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
     if serializer.is_valid():
       serializer.save()
-      return Response(
-        serializer.data,
-        status.HTTP_200_OK
+      return Response(serializer.data, status.HTTP_200_OK
       )
     
-    return Response(
-      serializer.errors,
-      status.HTTP_400_BAD_REQUEST
+    return Response(serializer.errors, status.HTTP_400_BAD_REQUEST
     )

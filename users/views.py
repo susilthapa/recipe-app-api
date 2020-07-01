@@ -8,10 +8,18 @@ from rest_framework.settings import api_settings
 
 from users.serializers import UserSerializer, AuthTokenSerializer
 
+from django.contrib.auth import get_user_model
+
+class ListUserView(generics.ListCreateAPIView):
+  serializer_class = UserSerializer
+  permission_classes = [permissions.IsAdminUser]
+  def get_queryset(self):
+      return get_user_model().objects.all()
 
 class CreateUserView(generics.CreateAPIView):
   """Create new user in the sysytem"""
   serializer_class = UserSerializer
+ 
 
 class CreateTokenView(ObtainAuthToken):
   """Create new auth token for user"""

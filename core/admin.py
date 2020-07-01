@@ -5,7 +5,7 @@ from core import models
 
 class UserAdmin(BaseUserAdmin):
   ordering = ['id']
-  list_display = ['email', 'name']
+  list_display = ['email', 'name', 'is_staff']
   fieldsets = (
       (None, {'fields': ('email', 'password'),}),
       (_('Personal Info'),{'fields':('name',)}),  # one itime fields therefore comma 
