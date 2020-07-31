@@ -13,7 +13,8 @@ def recipe_image_file_path(instance, filename):
   """Generate filepath for new recipe image"""
   ext = filename.split('.')[-1]
   filename = f'{uuid.uuid4()}.{ext}'
-
+  print(instance._meta.model.__name__)
+  # if(instance._meta.model.__name__ == 'Recipe')
   return os.path.join('uploads/recipe/', filename)
 
 
